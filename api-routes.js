@@ -4,6 +4,13 @@ const db = require('./db')
 router
   .route('/inventory')
   // TODO: Create a GET route that returns a list of everything in the inventory table
+  .get(async (req, res) => {
+    try {
+
+    } catch (err) {
+
+    }
+  })
   // The response should look like:
   // [
   //   {
