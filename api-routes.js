@@ -6,27 +6,39 @@ router
   // TODO: Create a GET route that returns a list of everything in the inventory table
   .get(async (req, res) => {
     try {
-      const [inventoryItems] = await
+      const [inventoryItems] = await db.query('SELECT * FROM inventory')
       res.json(inventoryItems)
     } catch (err) {
       res.status(500).send('Error retrieving inventory: ' + err.message)
     }
   })
-  // The response should look like:
-  // [
-  //   {
-  //     "id": 1,
-  //     "name": "Stratocaster",
-  //     "image": "strat.jpg",
-  //     "description": "One of the most iconic electric guitars ever made.",
-  //     "price": 599.99,
-  //     "quantity": 3
-  //   },
-  //   {...},
-  //   {...}, etc
-  // ]
 
   // TODO: Create a POST route that inserts inventory items
+  .post(async (req, res) => {
+    try {
+      const {
+        price,
+        quantity,
+        name,
+        image,
+        description
+      } = req.body
+      if (!(
+        price &&
+        quantity &&
+        name &&
+        image &&
+        description
+      ))
+      return res
+        .status(204)
+        .send('must include price, quantity, name, image and description')
+      
+      res.status(201).send('New item created')
+    } catch (err) {
+      res.status(500).send('Error creating user: ' + err.message)
+    }
+  })
   // This route will accept price, quantity, name, image, and description as JSON
   // in the request body.
   // It should return a 204 status code
@@ -34,8 +46,18 @@ router
 router
   .route('/inventory/:id')
   // TODO: Write a GET route that returns a single item from the inventory
-  // that matches the id from the route parameter
-  // Should return 404 if no item is found
+  .get(async (req, res) => {
+    try {
+      const [inventoryItem] = await db.query('SELECT * FROM inventory WHERE id = ?', [req.params.id]) // that matches the id from the route parameter
+      if (!inventoryItem || inventoryItem.length === 0) { // Should return 404 if no item is found
+        res.status(404).send('Item not found' + err.message)
+      }
+      res.json(inventoryItem[0])
+    } catch (err) {
+      res.status(500).send('Error retrieving inventory: ' + err.message)
+    }
+  })
+  
   // The response should look like:
   // {
   //   "id": 1,
