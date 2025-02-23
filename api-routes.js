@@ -6,9 +6,10 @@ router
   // TODO: Create a GET route that returns a list of everything in the inventory table
   .get(async (req, res) => {
     try {
-
+      const [inventoryItems] = await
+      res.json(inventoryItems)
     } catch (err) {
-
+      res.status(500).send('Error retrieving inventory: ' + err.message)
     }
   })
   // The response should look like:
