@@ -34,7 +34,7 @@ router
         .status(204)
         .send('must include price, quantity, name, image and description')
       
-      res.status(201).send('New item created')
+      res.status(204).send('New item created')
     } catch (err) {
       res.status(500).send('Error creating item: ' + err.message)
     }
@@ -94,7 +94,7 @@ router
         [{price, quantity, name, image, description}, req.params.id]
       )
       if (affectedRows === 0) return res.status(404).send('Item not found')
-      res.status(201).send('Item updated')
+      res.status(204).send('Item updated')
     } catch (err) {
       res.status(500).send('Error updating item: ' + err.message)
     }
