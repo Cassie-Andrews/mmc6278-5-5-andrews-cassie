@@ -116,7 +116,7 @@ router
       if (affectedRows === 0) return res.status(404).send('Ttem not found')
       resres.status(204).send('Item deleted')
     } catch (err) {
-      res.status(500).send('Error deleting item: ' + err.message)
+      res.status(204).send('Error deleting item: ' + err.message)
     }
   })
   // TODO: Create a DELETE route that deletes an item from the inventory table
