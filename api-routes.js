@@ -36,7 +36,7 @@ router
       
       res.status(201).send('New item created')
     } catch (err) {
-      res.status(500).send('Error creating user: ' + err.message)
+      res.status(500).send('Error creating item: ' + err.message)
     }
   })
   // This route will accept price, quantity, name, image, and description as JSON
@@ -57,7 +57,6 @@ router
       res.status(500).send('Error retrieving inventory: ' + err.message)
     }
   })
-  
   // The response should look like:
   // {
   //   "id": 1,
@@ -69,6 +68,37 @@ router
   // }
 
   // TODO: Create a PUT route that updates the inventory table based on the id
+  .put(async (req, res) => {
+    try {
+      const {
+        price,
+        quantity,
+        name,
+        image,
+        description
+      } = req.body
+      if (!(
+        price &&
+        quantity &&
+        name &&
+        image &&
+        description
+      ))
+      return res
+        .status(400)
+        .send('must include price, quantity, name, image and description')
+      
+
+      const [{affectedRows}] = await db.query(
+        `UPDATE inventory SET ? WHERE id = ?`,
+        [{price, quantity, name, image, description}, req.params.id]
+      )
+      if (affectedRows === 0) return res.status(404).send('Item not found')
+      res.status(201).send('Item updated')
+    } catch (err) {
+      res.status(500).send('Error updating item: ' + err.message)
+    }
+  })
   // in the route parameter.
   // This route should accept price, quantity, name, description, and image
   // in the request body.
