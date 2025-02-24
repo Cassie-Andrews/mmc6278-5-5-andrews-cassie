@@ -54,7 +54,7 @@ router
       }
       res.json(inventoryItem[0])
     } catch (err) {
-      res.status(500).send('Error retrieving inventory: ' + err.message)
+      res.status(404).send('Error retrieving inventory: ' + err.message)
     }
   })
   // The response should look like:
@@ -105,6 +105,20 @@ router
   // If no item is found, return a 404 status.
   // If an item is modified, return a 204 status code.
 
+
+  .delete(async (req, res) => {
+    try {
+      const [{affectedRows}] = await db.query(
+        `DELETE FROM inventory WHERE id = ?`,
+        req.params.id
+      )
+
+      if (affectedRows === 0) return res.status(404).send('Ttem not found')
+      resres.status(204).send('Item deleted')
+    } catch (err) {
+      res.status(500).send('Error deleting item: ' + err.message)
+    }
+  })
   // TODO: Create a DELETE route that deletes an item from the inventory table
   // based on the id in the route parameter.
   // If no item is found, return a 404 status.
