@@ -29,14 +29,18 @@ router
         name &&
         image &&
         description
-      ))
-      return res
-        .status(204)
-        .send('must include price, quantity, name, image and description')
+      )) {
+        return res.status(204).send('must include price, quantity, name, image and description')
+      }
       
+      const result = await db.query(
+        `INSERT INTO inventory (price, quantity, name, image, description) VALUES (? ? ? ? ?)`,
+        [price, quantity, name, image, description]
+      )
+
       res.status(204).send('New item created')
     } catch (err) {
-      res.status(500).send('Error creating item: ' + err.message)
+      res.status(204).send('Error creating item: ' + err.message)
     }
   })
   // This route will accept price, quantity, name, image, and description as JSON
